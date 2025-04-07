@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRL OÜ</title>
-    <link rel="icon" href="/static/images/logo.png">
+    <link rel="icon" href="/images/logo.png">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -85,8 +85,8 @@
     <!-- Navigatsioon -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <i class="fas me-2"><img height="64" src="/static/images/logo.png" alt=""></i>
+            <a class="navbar-brand" href="index.php">
+                <i class="fas me-2"><img height="64" src="/public/assets/images/logo.png" alt=""></i>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -103,7 +103,7 @@
                         <a class="nav-link" href="#meist">Meist</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.html">Blogi</a>
+                        <a class="nav-link" href="/public/blog.php">Blogi</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#kontakt">Kontakt</a>
@@ -341,59 +341,141 @@
                     </div>
                 </div>
                 
-                <div class="col-lg-7">
-                    <div class="contact-info-box h-100">
-                        <h3 class="mb-4">Saada päring</h3>
-                        <form>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="name" class="form-label">Nimi</label>
-                                    <input type="text" class="form-control" id="name" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="company" class="form-label">Ettevõte (valikuline)</label>
-                                    <input type="text" class="form-control" id="company">
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="email" class="form-label">E-post</label>
-                                    <input type="email" class="form-control" id="email" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="phone" class="form-label">Telefon</label>
-                                    <input type="tel" class="form-control" id="phone" required>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="service" class="form-label">Teenus</label>
-                                <select class="form-select" id="service">
-                                    <option selected>Vali teenus...</option>
-                                    <option>Multilift veod</option>
-                                    <option>Treilerveod</option>
-                                    <option>Fekaalivedu</option>
-                                    <option>Konteinerite rent ja prügivedu</option>
-                                    <option>Täitematerjali müük ja vedu</option>
-                                    <option>Kaevandusteenus</option>
-                                    <option>Laaduriteenus (5t)</option>
-                                    <option>Laaduriteenus (15t)</option>
-                                    <option>Muu</option>
-                                </select>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="message" class="form-label">Sõnum</label>
-                                <textarea class="form-control" id="message" rows="5" required></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary px-4 py-2">
-                                <i class="fas fa-paper-plane me-1"></i> Saada päring
-                            </button>
-                        </form>
-                    </div>
+                <?php
+// Process form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Collect form data
+    $name = $_POST['name'] ?? '';
+    $company = $_POST['company'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $phone = $_POST['phone'] ?? '';
+    $service = $_POST['service'] ?? '';
+    $message = $_POST['message'] ?? '';
+    
+    // Validate required fields
+    $errors = [];
+    if (empty($name)) $errors[] = "Nimi on kohustuslik";
+    if (empty($email)) $errors[] = "E-post on kohustuslik";
+    if (empty($phone)) $errors[] = "Telefon on kohustuslik";
+    if (empty($message)) $errors[] = "Sõnum on kohustuslik";
+    
+    if (empty($errors)) {
+        // Prepare email
+        $to = "keimo@hkhk.edu.ee";
+        $subject = "Uus päring HRL veoteenuste kodulehelt";
+        
+        $email_content = "
+            <html>
+            <head>
+                <title>Uus päring</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    table { border-collapse: collapse; width: 100%; }
+                    td, th { padding: 8px; border: 1px solid #ddd; text-align: left; }
+                    th { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+                <h2>Uus päring</h2>
+                <table>
+                    <tr><th>Väli</th><th>Väärtus</th></tr>
+                    <tr><td>Nimi</td><td>$name</td></tr>
+                    <tr><td>Ettevõte</td><td>" . (!empty($company) ? $company : "Määramata") . "</td></tr>
+                    <tr><td>E-post</td><td>$email</td></tr>
+                    <tr><td>Telefon</td><td>$phone</td></tr>
+                    <tr><td>Teenus</td><td>$service</td></tr>
+                    <tr><td>Sõnum</td><td>$message</td></tr>
+                </table>
+            </body>
+            </html>
+        ";
+        
+        // Email headers
+        $headers = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-type: text/html; charset=utf-8\r\n";
+        $headers .= "From: $email\r\n";
+        $headers .= "Reply-To: $email\r\n";
+        
+        // Send email
+        if (mail($to, $subject, $email_content, $headers)) {
+            $success = "Päring edukalt saadetud!";
+        } else {
+            $errors[] = "Päringu saatmine ebaõnnestus. Palun proovige uuesti.";
+        }
+    }
+}
+?>
+
+<div class="col-lg-7">
+    <div class="contact-info-box h-100">
+        <h3 class="mb-4">Saada päring</h3>
+        
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    <?php foreach ($errors as $error): ?>
+                        <li><?= htmlspecialchars($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        
+        <?php if (isset($success)): ?>
+            <div class="alert alert-success">
+                <?= htmlspecialchars($success) ?>
+            </div>
+        <?php endif; ?>
+        
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">Nimi</label>
+                    <input type="text" class="form-control" id="name" name="name" value="<?= isset($_POST['name']) ? htmlspecialchars($_POST['name']) : '' ?>" required>
                 </div>
+                <div class="col-md-6 mb-3">
+                    <label for="company" class="form-label">Ettevõte (valikuline)</label>
+                    <input type="text" class="form-control" id="company" name="company" value="<?= isset($_POST['company']) ? htmlspecialchars($_POST['company']) : '' ?>">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">E-post</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Telefon</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" value="<?= isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : '' ?>" required>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="service" class="form-label">Teenus</label>
+                <select class="form-select" id="service" name="service">
+                    <option value="" <?= !isset($_POST['service']) ? 'selected' : '' ?>>Vali teenus...</option>
+                    <option value="Multilift veod" <?= (isset($_POST['service']) && $_POST['service'] === 'Multilift veod') ? 'selected' : '' ?>>Multilift veod</option>
+                    <option value="Treilerveod" <?= (isset($_POST['service']) && $_POST['service'] === 'Treilerveod') ? 'selected' : '' ?>>Treilerveod</option>
+                    <option value="Fekaalivedu" <?= (isset($_POST['service']) && $_POST['service'] === 'Fekaalivedu') ? 'selected' : '' ?>>Fekaalivedu</option>
+                    <option value="Konteinerite rent ja prügivedu" <?= (isset($_POST['service']) && $_POST['service'] === 'Konteinerite rent ja prügivedu') ? 'selected' : '' ?>>Konteinerite rent ja prügivedu</option>
+                    <option value="Täitematerjali müük ja vedu" <?= (isset($_POST['service']) && $_POST['service'] === 'Täitematerjali müük ja vedu') ? 'selected' : '' ?>>Täitematerjali müük ja vedu</option>
+                    <option value="Kaevandusteenus" <?= (isset($_POST['service']) && $_POST['service'] === 'Kaevandusteenus') ? 'selected' : '' ?>>Kaevandusteenus</option>
+                    <option value="Laaduriteenus (5t)" <?= (isset($_POST['service']) && $_POST['service'] === 'Laaduriteenus (5t)') ? 'selected' : '' ?>>Laaduriteenus (5t)</option>
+                    <option value="Laaduriteenus (15t)" <?= (isset($_POST['service']) && $_POST['service'] === 'Laaduriteenus (15t)') ? 'selected' : '' ?>>Laaduriteenus (15t)</option>
+                    <option value="Muu" <?= (isset($_POST['service']) && $_POST['service'] === 'Muu') ? 'selected' : '' ?>>Muu</option>
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="message" class="form-label">Sõnum</label>
+                <textarea class="form-control" id="message" name="message" rows="5" required><?= isset($_POST['message']) ? htmlspecialchars($_POST['message']) : '' ?></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary px-4 py-2">
+                <i class="fas fa-paper-plane me-1"></i> Saada päring
+            </button>
+        </form>
+    </div>
+</div>
             </div>
         </div>
     </section>

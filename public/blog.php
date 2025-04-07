@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRL OÜ - Blogi</title>
-    <link rel="icon" href="/static/images/logo.png">
+    <link rel="icon" href="/images/logo.png">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -90,8 +90,8 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <i class="fas me-2"><img height="64" src="/static/images/logo.png" alt=""></i>
+            <a class="navbar-brand" href="../index.php">
+                <i class="fas me-2"><img height="64" src="assets/images/logo.png" alt=""></i>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -99,19 +99,19 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Avaleht</a>
+                        <a class="nav-link" href="index.php">Avaleht</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#teenused">Teenused</a>
+                        <a class="nav-link" href="index.php#teenused">Teenused</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#meist">Meist</a>
+                        <a class="nav-link" href="index.php#meist">Meist</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="blog.html">Blogi</a>
+                        <a class="nav-link active" href="blog.php">Blogi</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#kontakt">Kontakt</a>
+                        <a class="nav-link" href="index.php#kontakt">Kontakt</a>
                     </li>
                 </ul>
             </div>
@@ -126,11 +126,10 @@
         </div>
     </div>
 
-    <section class="py-5 bg-light-gray">
-        <div class="container py-5">
-            <div id="posts" class="row"></div>
-          </div>
-      </section>
+    <!-- Blog Posts Section -->
+    <section class="container my-5">
+        <div id="blog-posts"></div>
+    </section>
 
     <!-- Footer -->
     <footer class="py-4">
@@ -141,33 +140,8 @@
             </div>
         </div>
     </footer>
+    <script src="script.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const posts = JSON.parse(localStorage.getItem('posts')) || [];
-          const postsContainer = document.getElementById('posts');
-    
-          if (posts.length === 0) {
-            postsContainer.innerHTML = '<p class="text-center">No posts yet.</p>';
-          } else {
-            posts.forEach(post => {
-              postsContainer.innerHTML += `
-                <div class="col-md-4 mb-4">
-                  <div class="card h-100">
-                    <img src="${post.image}" class="card-img-top" alt="${post.title}">
-                    <div class="card-body">
-                      <h5 class="card-title">${post.title}</h5>
-                      <p class="card-text">${post.description}</p>
-                      <p class="text-muted">${new Date(post.date).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                </div>
-              `;
-            });
-          }
-        });
-      </script>
 </body>
 </html>

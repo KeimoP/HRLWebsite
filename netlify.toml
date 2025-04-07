@@ -1,0 +1,4 @@
+[[headers]]
+  for = "/public/admin.php"
+  [headers.values]
+    Basic-Auth = "Leemet:TurvalineParool"
