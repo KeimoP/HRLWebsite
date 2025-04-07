@@ -25,8 +25,9 @@
   [headers.values]
     Content-Security-Policy = """
       default-src 'self';
-      script-src 'self' https://cdn.jsdelivr.net https://identity.netlify.com;
-      style-src 'self' 'unsafe-inline' https:;
+      script-src 'self' 'unsafe-eval' https://identity.netlify.com https://unpkg.com;
+      style-src 'self' 'unsafe-inline';
       img-src 'self' data: https:;
-      font-src 'self' https:;
+      connect-src 'self' https://*.netlify.com https://*.netlify.app;
+      frame-src 'self' https://identity.netlify.com;
     """
