@@ -15,11 +15,16 @@
       script-src 'self' 'unsafe-eval' 
         https://cdn.jsdelivr.net 
         https://identity.netlify.com 
-        https://unpkg.com;
+        https://unpkg.com
+        https://kit.fontawesome.com;
       style-src 'self' 'unsafe-inline' 
-        https://cdn.jsdelivr.net;
+        https://cdn.jsdelivr.net
+        https://cdnjs.cloudflare.com;
       img-src 'self' data: https:;
-      font-src 'self' https://cdn.jsdelivr.net;
+      font-src 'self' 
+        https://cdn.jsdelivr.net
+        https://cdnjs.cloudflare.com
+        data:;
       connect-src 'self' https:;
       frame-src 'self' https://identity.netlify.com;
     """
@@ -31,9 +36,14 @@
       default-src 'self';
       script-src 'self' 
         https://cdn.jsdelivr.net 
-        https://identity.netlify.com;
+        https://identity.netlify.com
+        https://kit.fontawesome.com;
       style-src 'self' 'unsafe-inline' 
-        https://cdn.jsdelivr.net;
+        https://cdn.jsdelivr.net
+        https://cdnjs.cloudflare.com;
       img-src 'self' data: https:;
-      font-src 'self' https://cdn.jsdelivr.net;
+      font-src 'self' 
+        https://cdn.jsdelivr.net
+        https://cdnjs.cloudflare.com
+        data:;
     """
