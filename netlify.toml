@@ -12,10 +12,14 @@
   [headers.values]
     Content-Security-Policy = """
       default-src 'self';
-      script-src 'self' 'unsafe-eval' https://unpkg.com https://identity.netlify.com;
-      style-src 'self' 'unsafe-inline' https:;
+      script-src 'self' 'unsafe-eval' 
+        https://cdn.jsdelivr.net 
+        https://identity.netlify.com 
+        https://unpkg.com;
+      style-src 'self' 'unsafe-inline' 
+        https://cdn.jsdelivr.net;
       img-src 'self' data: https:;
-      font-src 'self' https:;
+      font-src 'self' https://cdn.jsdelivr.net;
       connect-src 'self' https:;
       frame-src 'self' https://identity.netlify.com;
     """
@@ -25,9 +29,11 @@
   [headers.values]
     Content-Security-Policy = """
       default-src 'self';
-      script-src 'self' 'unsafe-eval' https://identity.netlify.com https://unpkg.com;
-      style-src 'self' 'unsafe-inline';
+      script-src 'self' 
+        https://cdn.jsdelivr.net 
+        https://identity.netlify.com;
+      style-src 'self' 'unsafe-inline' 
+        https://cdn.jsdelivr.net;
       img-src 'self' data: https:;
-      connect-src 'self' https://*.netlify.com https://*.netlify.app;
-      frame-src 'self' https://identity.netlify.com;
+      font-src 'self' https://cdn.jsdelivr.net;
     """
