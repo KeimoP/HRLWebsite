@@ -1,11 +1,64 @@
 [build]
+  # Basic build settings
+  command = "echo 'No build command specified'"  # Replace if you have a build process
   publish = "/"
-  command = "echo 'No build command'"
+  functions = "functions"  # If using Netlify Functions
 
+[build.environment]
+  # Environment variables
+  NODE_VERSION = "18"  # Example Node version
+  YARN_VERSION = "1.22"  # Example Yarn version
+
+[context.production.environment]
+  # Production-specific environment variables
+  HUGO_VERSION = "0.120.3"  # Example if using Hugo
+
+# Redirects for Netlify CMS and SPA routing
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security headers for admin section
 [[headers]]
   for = "/admin/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' https://unpkg.com https://identity.netlify.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' https: data:; font-src 'self' https: data:; connect-src 'self' https:;"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-eval' https://unpkg.com https://identity.netlify.com;
+      style-src 'self' 'unsafe-inline' https:;
+      img-src 'self' https: data:;
+      font-src 'self' https: data:;
+      connect-src 'self' https:;
+      frame-src 'self' https://identity.netlify.com;
+    """
+
+# General security headers for the whole site
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' https://cdn.jsdelivr.net https://identity.netlify.com;
+      style-src 'self' 'unsafe-inline' https:;
+      img-src 'self' https: data:;
+      font-src 'self' https: data:;
+      connect-src 'self' https:;
+    """
+
+# If using Netlify Functions
+[functions]
+  node_bundler = "esbuild"  # ESBuild for faster function packaging
