@@ -1,4 +1,7 @@
 <?php
+require 'auth.php';
+?>
+<?php
 // Vormi saatmise käsitlemine
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $uploadDir = 'uploads/';
