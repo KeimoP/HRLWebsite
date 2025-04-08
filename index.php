@@ -103,7 +103,7 @@
                         <a class="nav-link" href="#meist">Meist</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/public/blog.php">Blogi</a>
+                        <a class="nav-link" href="./public/blog.php#blog-posts">Blogi</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#kontakt">Kontakt</a>

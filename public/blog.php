@@ -99,19 +99,19 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Avaleht</a>
+                        <a class="nav-link" href="../index.php">Avaleht</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#teenused">Teenused</a>
+                        <a class="nav-link" href="../index.php#teenused">Teenused</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#meist">Meist</a>
+                        <a class="nav-link" href="../index.php#meist">Meist</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="blog.php">Blogi</a>
+                        <a class="nav-link active" href="blog.php#blog-posts">Blogi</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php#kontakt">Kontakt</a>
+                        <a class="nav-link" href="../index.php#kontakt">Kontakt</a>
                     </li>
                 </ul>
             </div>
