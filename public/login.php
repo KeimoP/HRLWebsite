@@ -2,25 +2,43 @@
 session_start();
 require 'db_connection.php';
 
+// Clear any existing session data
+session_unset();
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get raw input (no trimming for passwords!)
     $username = trim($_POST['username']);
-    $password = $_POST['password'];
+    $password = $_POST['password']; 
     
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
-    
-    if ($user && password_verify($password, $user['password_hash'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
-        $_SESSION['last_activity'] = time();
+    try {
+        // Case-sensitive username check
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE BINARY username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
         
-        header('Location: admin.php');
-        exit;
-    } else {
-        $error = 'Invalid username or password';
+        if ($user && password_verify($password, $user['password_hash'])) {
+            // Regenerate session ID to prevent fixation
+            session_regenerate_id(true);
+            
+            // Set secure session data
+            $_SESSION = [
+                'user_id' => $user['id'],
+                'username' => $user['username'],
+                'role' => $user['role'],
+                'ip' => $_SERVER['REMOTE_ADDR'],
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+                'last_activity' => time()
+            ];
+            
+            header('Location: admin.php');
+            exit;
+        } else {
+            $error = "Invalid username or password";
+        }
+    } catch (PDOException $e) {
+        error_log("Login error: " . $e->getMessage());
+        $error = "Database error occurred";
     }
 }
 ?>
@@ -29,36 +47,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRL OÜ - Admin Login</title>
+    <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .login-container { max-width: 400px; margin: 100px auto; }
-        .form-signin { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .login-box { max-width: 400px; margin: 5rem auto; border: 1px solid #ddd; border-radius: 10px; padding: 2rem; }
+        .alert { margin-top: 1rem; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="login-container">
-            <div class="text-center mb-4">
-                <img src="../assets/images/logo.png" alt="HRL OÜ" width="100">
-                <h1 class="h3 mt-3">HRL Admin</h1>
-            </div>
+        <div class="login-box shadow">
+            <h2 class="text-center mb-4">Admin Login</h2>
             
             <?php if ($error): ?>
                 <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
             
-            <form class="form-signin" method="POST">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="username" name="username" required>
-                    <label for="username">Kasutajanimi</label>
+            <form method="POST" autocomplete="off">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required autofocus>
                 </div>
-                <div class="form-floating mb-3">
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
-                    <label for="password">Parool</label>
                 </div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Logi sisse</button>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
         </div>
     </div>

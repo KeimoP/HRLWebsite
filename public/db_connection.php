@@ -2,7 +2,7 @@
 $host = 'localhost';
 $db   = 'hrl_veoteenused';
 $user = 'hrl_user';
-$pass = 'Passw0rd';
+$pass = 'Z2PWGXw4xwkyaFgts';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
